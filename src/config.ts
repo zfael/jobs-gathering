@@ -1,5 +1,5 @@
 export default {
-  userAgent: 'testMozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16',
+  userAgent: 'aMozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16',
   language: 'lang_pt',
   range: 'qdr:m',
   searches: [
