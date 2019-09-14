@@ -1,0 +1,31 @@
+service: jobs-gathering-service
+
+plugins:
+  - serverless-pseudo-parameters
+
+custom:
+  config: ${file(./config/${self:provider.stage}.json)}
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  memorySize: 128
+  stage: ${opt:stage}
+  timeout: 10
+  environment:
+    NODE_ENV: '${opt:stage}'
+  iamRoleStatements:
+
+package:
+  exclude:
+    - ./**
+    - '!node_modules/**'
+    - 'node_modules/**/aws-sdk/**'
+  include:
+    - package.json
+    - dist/**
+    - config/**
+
+functions:
+  scrape-jobs:
+    handler: dist/handlers.scrapeJobsHandler

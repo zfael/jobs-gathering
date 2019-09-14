@@ -1,9 +1,9 @@
-import config from './config';
 import querystring from 'querystring';
 import cheerio from 'cheerio';
 import axios from 'axios';
+import config from './config';
 
-(async () => {
+const scrap = async () => {
   const { userAgent, language: lr, range: tbs, searches } = config;
 
   for (const key in searches) {
@@ -25,16 +25,16 @@ import axios from 'axios';
         lr,
       },
     };
-    const url = 'https://www.google.com/search';
+    const google = 'https://www.google.com/search';
 
-    const result = await axios.get(url, axiosConfig);
+    const result = await axios.get(google, axiosConfig);
 
     const body = result.data;
     const $ = cheerio.load(body);
     const titles = $('#main > div:nth-child(n) > div > div:nth-child(1) > a');
     const snippets = $('#main > div:nth-child(n) > div > div:nth-child(3) > div > div > div > div > div');
 
-    const filterRandomFields = key => !['options', '_root', 'length', 'prevObject'].includes(key);
+    const filterRandomFields = field => !['options', '_root', 'length', 'prevObject'].includes(field);
 
     const titleKeys = Object.keys(titles).filter(filterRandomFields);
 
@@ -106,4 +106,8 @@ import axios from 'axios';
   // });
 
   // console.log(JSON.stringify(results, null, 2));
-})();
+};
+
+export default {
+  scrap,
+};
