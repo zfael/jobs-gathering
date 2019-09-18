@@ -13,4 +13,9 @@ resource "aws_dynamodb_table" "jobs" {
     name = "url"
     type = "S"
   }
+
+  ttl {
+    attribute_name = "expirationTime"
+    enabled        = true
+  }
 }

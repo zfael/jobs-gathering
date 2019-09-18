@@ -2,9 +2,12 @@ import querystring from 'querystring';
 import cheerio from 'cheerio';
 import axios from 'axios';
 import config from './config';
+import jobs from '../../utils/dynamodb/jobs';
 
 const scrap = async () => {
   const { userAgent, language: lr, range: tbs, searches } = config;
+
+  const results = [];
 
   for (const key in searches) {
     const {
@@ -38,7 +41,7 @@ const scrap = async () => {
 
     const titleKeys = Object.keys(titles).filter(filterRandomFields);
 
-    const results = titleKeys.map(titleKey => {
+    titleKeys.forEach(titleKey => {
       const { data: rawTitle } = titles[titleKey].children[0].children[0];
       const targetUrl = titles[titleKey].parent.children[0].attribs.href.replace('/url?q=', '');
       const { data: snippet } = snippets[titleKey].children[2];
@@ -51,15 +54,18 @@ const scrap = async () => {
       const sanitizedUrl = targetUrl.substring(0, targetUrl.indexOf('&sa'));
       const url = querystring.unescape(sanitizedUrl);
 
-      return {
+      results.push({
         title,
         url,
-        // url,
         snippet,
-      };
+      });
     });
+  }
 
-    console.log(JSON.stringify(results, null, 2));
+  for (const key in results) {
+    const job = results[key];
+
+    await jobs.add(job);
   }
 
   // const config = {

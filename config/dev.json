@@ -1,3 +1,7 @@
 {
-  "aws": {}
+  "aws": {
+    "dynamodb": {
+      "jobsTable": "jobs_dev"
+    }
+  }
 }
