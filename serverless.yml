@@ -15,6 +15,12 @@ provider:
   environment:
     NODE_ENV: '${opt:stage}'
   iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:Scan'
+        - 'dynamodb:PutItem'
+      Resource:
+        - 'arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/jobs_*'
 
 package:
   exclude:
@@ -29,3 +35,10 @@ package:
 functions:
   scrape-jobs:
     handler: dist/handlers.scrapeJobsHandler
+  list-jobs:
+    handler: dist/handlers.listJobsHandler
+    events:
+      - http:
+          path: v1/jobs
+          method: get
+          cors: true
