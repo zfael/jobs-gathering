@@ -63,8 +63,9 @@ const scrap = async () => {
     });
   }
 
-  for (const key in results) {
-    const job = results[key];
+  const shuffled = results.sort(() => Math.random() - 0.5);
+  for (const key in shuffled) {
+    const job = shuffled[key];
 
     await jobs.add(job);
   }
