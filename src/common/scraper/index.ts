@@ -55,6 +55,7 @@ const scrap = async () => {
       const url = querystring.unescape(sanitizedUrl);
 
       results.push({
+        source: 'AUTO',
         title,
         url,
         snippet,

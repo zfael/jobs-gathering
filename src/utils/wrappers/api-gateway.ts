@@ -15,5 +15,7 @@ export default targetHandler => async (event, context) => {
       },
       body: JSON.stringify(data),
     };
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
