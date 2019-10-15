@@ -5,7 +5,7 @@ const handler = async ({ queryStringParameters }) => {
   const { limit, cursor } = queryStringParameters;
   const { items, cursor: next } = await jobs.list({ limit, cursor });
 
-  const result = items.map(({ expirationTime, creationTime, ...rest }) => ({
+  const result = items.map(({ source, expirationTime, creationTime, ...rest }) => ({
     createdAt: new Date(creationTime).toISOString(),
     ...rest,
   }));

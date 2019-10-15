@@ -6,5 +6,7 @@ export default targetHandler => async (event, context) => {
     });
 
     return data;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };

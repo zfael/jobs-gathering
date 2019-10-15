@@ -11,12 +11,12 @@ const scrap = async () => {
 
   for (const key in searches) {
     const {
-      name,
+      // name,
       query: q,
       titleReplacement: { from, to },
     } = searches[key];
 
-    console.log('searching on ', name);
+    // console.log('searching on ', name);
 
     const axiosConfig = {
       headers: {

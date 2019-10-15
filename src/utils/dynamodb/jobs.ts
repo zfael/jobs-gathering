@@ -25,9 +25,9 @@ const add = async ({ source, url, title, snippet }: Job) => {
   const params = {
     TableName,
     Item: {
+      url,
       source,
       creationTime,
-      url,
       title,
       snippet,
       expirationTime,
@@ -42,6 +42,7 @@ const add = async ({ source, url, title, snippet }: Job) => {
 const list = async ({ limit = 10, cursor = '' }) => {
   const params: any = {
     TableName,
+    IndexName: 'sourceIndex',
     KeyConditionExpression: '#source = :source',
     ExpressionAttributeNames: {
       '#source': 'source',
@@ -59,7 +60,7 @@ const list = async ({ limit = 10, cursor = '' }) => {
   }
 
   const { Items: items, LastEvaluatedKey } = await documentClient.query(params).promise();
-  const cursorEncoded = Buffer.from(JSON.stringify(LastEvaluatedKey)).toString('base64');
+  const cursorEncoded = LastEvaluatedKey ? Buffer.from(JSON.stringify(LastEvaluatedKey)).toString('base64') : '';
 
   return { items, cursor: cursorEncoded };
 };
