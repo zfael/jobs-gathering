@@ -36,7 +36,13 @@ const add = async ({ source, url, title, snippet }: Job) => {
     ExpressionAttributeNames: { '#url': 'url' },
   };
 
-  return documentClient.put(params).promise();
+  try {
+    await documentClient.put(params).promise();
+  } catch (error) {
+    if (error.code !== 'ConditionalCheckFailedException') {
+      throw error;
+    }
+  }
 };
 
 const list = async ({ limit = 10, cursor = '' }) => {

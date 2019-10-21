@@ -11,12 +11,12 @@ const scrap = async () => {
 
   for (const key in searches) {
     const {
-      // name,
+      name,
       query: q,
       titleReplacement: { from, to },
     } = searches[key];
 
-    // console.log('searching on ', name);
+    console.log('searching on ', name);
 
     const axiosConfig = {
       headers: {
@@ -46,10 +46,6 @@ const scrap = async () => {
       const targetUrl = titles[titleKey].parent.children[0].attribs.href.replace('/url?q=', '');
       const { data: snippet } = snippets[titleKey].children[2];
 
-      // geek hunter
-      // info jobs
-      // love mondays
-      // trampos.co
       const title = rawTitle.replace(from, to);
       const sanitizedUrl = targetUrl.substring(0, targetUrl.indexOf('&sa'));
       const url = querystring.unescape(sanitizedUrl);

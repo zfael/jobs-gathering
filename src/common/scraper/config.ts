@@ -3,6 +3,7 @@ export default {
   language: 'lang_pt',
   range: 'qdr:d',
   searches: [
+    // kenoby
     {
       name: 'Kenoby',
       query: 'allintitle: engineer site:jobs.kenoby.com/*/',
@@ -27,6 +28,7 @@ export default {
         to: '',
       },
     },
+    // programathor
     {
       name: 'programathor',
       query: 'allintitle: engineer site:https://programathor.com.br/jobs/*',
@@ -48,6 +50,164 @@ export default {
       query: 'allintitle: java site:https://programathor.com.br/jobs/*',
       titleReplacement: {
         from: ' - ProgramaThor',
+        to: '',
+      },
+    },
+
+    // geek hunter
+    {
+      name: 'GeekHunter',
+      query: 'allinurl: backend site:geekhunter.com.br/vaga/*',
+      titleReplacement: {
+        from: ' - GeekHunter',
+        to: '',
+      },
+    },
+    {
+      name: 'GeekHunter',
+      query: 'allinurl: engineer site:geekhunter.com.br/vaga/*',
+      titleReplacement: {
+        from: ' - GeekHunter',
+        to: '',
+      },
+    },
+    {
+      name: 'GeekHunter',
+      query: 'allinurl: front-end site:geekhunter.com.br/vaga/*',
+      titleReplacement: {
+        from: ' - GeekHunter',
+        to: '',
+      },
+    },
+    {
+      name: 'GeekHunter',
+      query: 'allinurl: back-end site:geekhunter.com.br/vaga/*',
+      titleReplacement: {
+        from: ' - GeekHunter',
+        to: '',
+      },
+    },
+    {
+      name: 'GeekHunter',
+      query: 'allinurl: desenvolvedor site:geekhunter.com.br/vaga/*',
+      titleReplacement: {
+        from: ' - GeekHunter',
+        to: '',
+      },
+    },
+    {
+      name: 'GeekHunter',
+      query: 'allinurl: programador site:geekhunter.com.br/vaga/*',
+      titleReplacement: {
+        from: ' - GeekHunter',
+        to: '',
+      },
+    },
+
+    // info jobs
+    {
+      name: 'InfoJobs',
+      query: 'allintitle: java site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' - infojobs',
+        to: '',
+      },
+    },
+    {
+      name: 'InfoJobs',
+      query: 'allintitle: back-end site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' - infojobs',
+        to: '',
+      },
+    },
+    {
+      name: 'InfoJobs',
+      query: 'allintitle: engineer site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' - infojobs',
+        to: '',
+      },
+    },
+    {
+      name: 'InfoJobs',
+      query: 'allintitle: node site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' - infojobs',
+        to: '',
+      },
+    },
+    {
+      name: 'InfoJobs',
+      query: 'allintitle: javascript site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' - infojobs',
+        to: '',
+      },
+    },
+
+    // trampos.co
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: back-end site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
+        to: '',
+      },
+    },
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: javascript site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
+        to: '',
+      },
+    },
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: front-end site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
+        to: '',
+      },
+    },
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: engineer site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
+        to: '',
+      },
+    },
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: desenvolvedor site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
+        to: '',
+      },
+    },
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: programador site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
+        to: '',
+      },
+    },
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: node site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
+        to: '',
+      },
+    },
+    {
+      name: 'Trampos.co',
+      query: 'allintitle: react site:https://www.infojobs.com.br/*',
+      titleReplacement: {
+        from: ' | trampos.co',
         to: '',
       },
     },
