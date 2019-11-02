@@ -4,7 +4,7 @@ locals {
 }
 
 provider "aws" {
-  version = "~> 2.6.0"
+  version = "~> 2.12.0"
   profile = "${local.profile}"
 }
 

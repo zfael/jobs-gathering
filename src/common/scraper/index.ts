@@ -3,20 +3,21 @@ import cheerio from 'cheerio';
 import axios from 'axios';
 import config from './config';
 import jobs from '../../utils/dynamodb/jobs';
+import cleanJobTitle from '../sanitizer/cleanJobTitles';
 
-const scrap = async () => {
-  const { userAgent, language: lr, range: tbs, searches } = config;
+const chunkSize = 4;
+const scrap = async ({ target }) => {
+  const { userAgent, language: lr, range: tbs, searches, keywords } = config;
 
   const results = [];
+  const { name, type, site } = searches.find(search => search.name === target);
+  const keywordGroups = keywords
+    .map((_, index) => (index % chunkSize === 0 ? keywords.slice(index, index + chunkSize) : null))
+    .filter(Boolean);
 
-  for (const key in searches) {
-    const {
-      name,
-      query: q,
-      titleReplacement: { from, to },
-    } = searches[key];
-
-    console.log('searching on ', name);
+  for (const keywordGroup of keywordGroups) {
+    const keyword = keywordGroup.join(' OR ');
+    const q = `${type}: ${keyword} ${site}`;
 
     const axiosConfig = {
       headers: {
@@ -30,41 +31,49 @@ const scrap = async () => {
     };
     const google = 'https://www.google.com/search';
 
-    const result = await axios.get(google, axiosConfig);
+    try {
+      const result = await axios.get(google, axiosConfig);
 
-    const body = result.data;
-    const $ = cheerio.load(body);
-    const titles = $('#main > div:nth-child(n) > div > div:nth-child(1) > a');
-    const snippets = $('#main > div:nth-child(n) > div > div:nth-child(3) > div > div > div > div > div');
+      const body = result.data;
+      const $ = cheerio.load(body);
+      const titles = $('#main > div:nth-child(n) > div > div:nth-child(1) > a');
+      const snippets = $('#main > div:nth-child(n) > div > div:nth-child(3) > div > div > div > div > div');
 
-    const filterRandomFields = field => !['options', '_root', 'length', 'prevObject'].includes(field);
+      const filterRandomFields = field => !['options', '_root', 'length', 'prevObject'].includes(field);
 
-    const titleKeys = Object.keys(titles).filter(filterRandomFields);
+      const titleKeys = Object.keys(titles).filter(filterRandomFields);
 
-    titleKeys.forEach(titleKey => {
-      const { data: rawTitle } = titles[titleKey].children[0].children[0];
-      const targetUrl = titles[titleKey].parent.children[0].attribs.href.replace('/url?q=', '');
-      const { data: snippet } = snippets[titleKey].children[2];
+      titleKeys.forEach(titleKey => {
+        const { data: title } = titles[titleKey].children[0].children[0];
+        const targetUrl = titles[titleKey].parent.children[0].attribs.href.replace('/url?q=', '');
+        const { data: snippet } = snippets[titleKey].children[2];
 
-      const title = rawTitle.replace(from, to);
-      const sanitizedUrl = targetUrl.substring(0, targetUrl.indexOf('&sa'));
-      const url = querystring.unescape(sanitizedUrl);
+        const sanitizedUrl = targetUrl.substring(0, targetUrl.indexOf('&sa'));
+        const url = querystring.unescape(sanitizedUrl);
 
-      results.push({
-        source: 'AUTO',
-        title,
-        url,
-        snippet,
+        results.push({
+          source: 'AUTO',
+          title: cleanJobTitle({ title }),
+          url,
+          snippet,
+        });
       });
-    });
+      console.log(`search result for ${name} and keywords ${keyword}`, { quantity: titleKeys.length });
+    } catch (error) {
+      console.log(`search result for ${name} and keywords ${keyword} FAILED`, { message: error.message });
+    }
   }
 
   const shuffled = results.sort(() => Math.random() - 0.5);
-  for (const key in shuffled) {
-    const job = shuffled[key];
+  const promises = shuffled.map(job => jobs.add(job));
 
-    await jobs.add(job);
-  }
+  await Promise.all(promises);
+
+  // for (const key in shuffled) {
+  //   const job = shuffled[key];
+
+  //   await jobs.add(job);
+  // }
 
   // const config = {
   //   headers: {
