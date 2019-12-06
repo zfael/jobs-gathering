@@ -3,7 +3,9 @@ import cheerio from 'cheerio';
 import axios from 'axios';
 import config from './config';
 import jobs from '../../utils/dynamodb/jobs';
+import jobIds from '../../utils/dynamodb/jobIds';
 import cleanJobTitle from '../sanitizer/cleanJobTitles';
+import dynamicLinks from '../dynamicLinks'
 
 const chunkSize = 4;
 const scrap = async ({ target }) => {
@@ -65,9 +67,25 @@ const scrap = async ({ target }) => {
   }
 
   const shuffled = results.sort(() => Math.random() - 0.5);
-  const promises = shuffled.map(job => jobs.add(job));
 
-  await Promise.all(promises);
+  for (const job of shuffled) {
+    const {
+      title,
+      snippet: description,
+    } = job;
+    const id = await jobIds.add({ url: job.url });
+    const shareLink = await dynamicLinks.createJobLink({ id, title, description });
+    await jobs.add({ ...job, shareLink });
+    await jobs.appendShareLink({ ...job, shareLink });
+  }
+
+  // const promises = shuffled.map(job => jobs.add(job));
+  // const shareLinkPromises = shuffled.map(job => jobIds.add({ url: job.url }));
+
+  // await Promise.all(promises);
+  // await Promise.all(shareLinkPromises);
+
+  /////// do not uncommeed down
 
   // for (const key in shuffled) {
   //   const job = shuffled[key];

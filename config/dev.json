@@ -1,7 +1,14 @@
 {
   "aws": {
     "dynamodb": {
-      "jobsTable": "jobs_dev"
+      "jobsTable": "jobs_dev",
+      "jobIdsTable": "job_ids_dev"
+    }
+  },
+  "firebase": {
+    "apikey": "AIzaSyB3_I7skvwOWmJucjXtdxbSduXn0AI91zU",
+    "dynamicLink": {
+      "domainUriPrefix": "https://jobbeer.app/jobs"
     }
   }
 }

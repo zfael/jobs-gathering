@@ -1,5 +1,6 @@
 import apiGateway from '../../utils/wrappers/api-gateway';
 import jobs from '../../utils/dynamodb/jobs';
+import jobIds from '../../utils/dynamodb/jobIds';
 
 const handler = async ({ queryStringParameters }) => {
   if (Number(queryStringParameters.limit) > 20) throw new Error('Limit maximum allowed is 20');
@@ -7,8 +8,13 @@ const handler = async ({ queryStringParameters }) => {
   const { limit, cursor } = queryStringParameters;
   const { items, cursor: next } = await jobs.list({ limit, cursor });
 
-  const result = items.map(({ source, expirationTime, creationTime, ...rest }) => ({
+  const idPromises = items.map(({ url }) => jobIds.getIdByUrl({ url }));
+
+  const ids = await Promise.all(idPromises);
+
+  const result = items.map(({ source, expirationTime, creationTime, ...rest }, index) => ({
     createdAt: new Date(creationTime).toISOString(),
+    id: ids[index],
     ...rest,
   }));
 

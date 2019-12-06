@@ -1,11 +1,12 @@
 export default targetHandler => async (event, context) => {
-  const { queryStringParameters } = event;
+  const { queryStringParameters, pathParameters } = event;
 
   try {
     const data = await targetHandler({
       context,
       event,
       queryStringParameters,
+      pathParameters,
     });
 
     return {
